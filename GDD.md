@@ -21,3 +21,8 @@ Introdução da **Loja do Parque** (`/shop`):
 - **Game Design**: Loop de feedback aprimorado e novos sinks de economia.
 - **Game Art**: Uso de assets estilizados e animações orgânicas.
 - **Game Audio**: Hierarquia sonora pronta para expansão.
+
+## 5. Novas Funcionalidades
+- **Metas de Nível**: Sistema de **3 Estrelas** baseado no tempo restante.
+- **Feedback & Juice**: Micro-animações com `framer-motion`, sistema de **Combo** para multiplicadores de pontos, e feedback de proximidade visual nos canteiros.
+- **Economia**: Sistema de moedas e loja de itens.
