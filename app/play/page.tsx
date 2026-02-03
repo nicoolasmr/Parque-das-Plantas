@@ -59,87 +59,97 @@ export default function PlayPage() {
     return (
         <main className="min-h-screen bg-[#1a1a1a] text-white flex flex-col items-center">
             {/* Header / Game Controls */}
-            <div className="w-full max-w-lg p-4 flex items-center justify-between">
-                <Link href="/" className="p-3 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors">
-                    <ArrowLeft size={24} />
+            <div className="w-full max-w-lg p-6 flex items-center justify-between z-10">
+                <Link href="/" className="p-4 glass rounded-3xl hover:bg-white/10 transition-all active:scale-95 group">
+                    <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
                 </Link>
-                <div className="flex items-center gap-2 bg-yellow-500/20 px-4 py-2 rounded-2xl border border-yellow-500/20">
-                    <Coins size={20} className="text-yellow-500" />
-                    <span className="font-bold text-yellow-500">{userData.coins}</span>
+                <div className="flex items-center gap-3 glass px-6 py-3 rounded-[2rem] border border-white/10 shadow-xl">
+                    <Coins size={22} className="text-yellow-400" />
+                    <span className="font-black text-yellow-400 text-xl">{userData.coins}</span>
                 </div>
             </div>
 
             {gameState === 'playing' ? (
-                <GameCanvas
-                    levelIndex={currentLevelIndex}
-                    onWin={handleWin}
-                    onLost={handleLoss}
-                />
+                <div className="w-full h-full flex items-center justify-center animate-in fade-in zoom-in-95 duration-700">
+                    <GameCanvas
+                        levelIndex={currentLevelIndex}
+                        onWin={handleWin}
+                        onLost={handleLoss}
+                    />
+                </div>
             ) : null}
 
             {/* Overlays */}
             {gameState === 'won' && (
-                <div className="fixed inset-0 bg-green-950/90 backdrop-blur-md z-50 flex flex-col items-center justify-center p-8 text-center animate-in fade-in duration-500">
+                <div className="fixed inset-0 bg-green-950/40 backdrop-blur-2xl z-50 flex flex-col items-center justify-center p-8 text-center animate-in fade-in duration-700">
                     <motion.div
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        className="bg-[#22c55e] p-8 rounded-[3rem] w-full max-w-sm text-center shadow-2xl border-4 border-green-400"
+                        initial={{ scale: 0.9, opacity: 0, y: 40 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        transition={{ type: "spring", damping: 20, stiffness: 100 }}
+                        className="glass-card p-10 rounded-[3.5rem] w-full max-w-sm text-center border-white/20 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)]"
                     >
-                        <Trophy className="mx-auto mb-4 text-yellow-300 drop-shadow-lg" size={80} />
-                        <h2 className="text-4xl font-black mb-2 tracking-tight">VITÓRIA!</h2>
+                        <div className="relative mb-8">
+                            <motion.div
+                                animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.1, 1] }}
+                                transition={{ repeat: Infinity, duration: 3 }}
+                            >
+                                <Trophy className="mx-auto text-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]" size={100} />
+                            </motion.div>
+                            <Sparkles className="absolute -top-4 -right-4 text-white animate-pulse" size={32} />
+                        </div>
 
-                        <div className="flex justify-center gap-2 mb-6">
+                        <h2 className="text-5xl font-black mb-2 tracking-tighter text-white">VITÓRIA!</h2>
+                        <p className="text-green-300/60 font-medium mb-8">Nível {currentLevelIndex + 1} Concluído</p>
+
+                        <div className="flex justify-center gap-3 mb-10">
                             {[1, 2, 3].map((s) => (
                                 <motion.div
                                     key={s}
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    transition={{ delay: 0.2 + s * 0.1, type: "spring" }}
+                                    initial={{ scale: 0, rotate: -45 }}
+                                    animate={{ scale: 1, rotate: 0 }}
+                                    transition={{ delay: 0.3 + s * 0.15, type: "spring" }}
                                 >
                                     <Star
-                                        size={32}
-                                        className={s <= stars ? "text-yellow-400 fill-yellow-400" : "text-white/20"}
+                                        size={40}
+                                        className={s <= stars ? "text-yellow-400 fill-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.4)]" : "text-white/10"}
                                     />
                                 </motion.div>
                             ))}
                         </div>
 
-                        <div className="bg-green-600/50 p-6 rounded-3xl mb-8 flex flex-col items-center gap-2">
-                            <span className="text-xs font-bold opacity-60 uppercase tracking-widest">Recompensa</span>
-                            <div className="flex items-center gap-3">
-                                <motion.div
-                                    animate={{ y: [0, -10, 0] }}
-                                    transition={{ repeat: Infinity, duration: 2 }}
-                                >
-                                    <Coins className="text-yellow-400" size={32} />
-                                </motion.div>
-                                <span className="text-4xl font-black text-white">{earnedCoins}</span>
+                        <div className="glass bg-white/5 p-8 rounded-[2.5rem] mb-10 flex flex-col items-center gap-3 border border-white/10">
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Recompensa Obtida</span>
+                            <div className="flex items-center gap-4">
+                                <Coins className="text-yellow-400" size={32} />
+                                <span className="text-5xl font-black text-white">{earnedCoins}</span>
                             </div>
                         </div>
 
                         {PLANTS_DATA[currentLevelIndex + 1] && (
-                            <div className="flex justify-between items-center p-3 bg-green-500/20 rounded-2xl border border-green-500/20 mb-6">
-                                <span className="text-sm">Nova Planta:</span>
-                                <span className="text-2xl">{PLANTS_DATA[currentLevelIndex + 1].icon}</span>
+                            <div className="flex justify-between items-center px-6 py-4 glass rounded-[1.5rem] border border-white/10 mb-8 overflow-hidden group">
+                                <span className="text-xs font-bold text-white/60">Nova Planta desbloqueada!</span>
+                                <span className="text-3xl group-hover:scale-125 transition-transform duration-500 drop-shadow-md">
+                                    {PLANTS_DATA[currentLevelIndex + 1].icon}
+                                </span>
                             </div>
                         )}
 
-                        <div className="flex flex-col gap-3 w-full">
+                        <div className="flex flex-col gap-4 w-full">
                             {currentLevelIndex < LEVELS.length - 1 ? (
                                 <button
                                     onClick={handleNextLevel}
-                                    className="bg-green-500 hover:bg-green-400 py-4 rounded-2xl font-bold text-xl transition-all shadow-xl"
+                                    className="bg-green-500 hover:bg-green-400 text-green-950 py-5 rounded-[1.5rem] font-black text-xl transition-all shadow-[0_20px_40px_-10px_rgba(34,197,94,0.4)] transform active:scale-95"
                                 >
                                     PRÓXIMO NÍVEL
                                 </button>
                             ) : (
                                 <Link href="/garden" className="w-full">
-                                    <button className="w-full bg-green-500 hover:bg-green-400 py-4 rounded-2xl font-bold text-xl transition-all shadow-xl">
-                                        IR PARA O JARDIM
+                                    <button className="w-full bg-green-500 hover:bg-green-400 text-green-950 py-5 rounded-[1.5rem] font-black text-xl transition-all shadow-[0_20px_40px_-10px_rgba(34,197,94,0.4)] transform active:scale-95">
+                                        VER MEU JARDIM
                                     </button>
                                 </Link>
                             )}
-                            <Link href="/" className="text-white/40 hover:text-white transition-colors py-2 font-medium">
+                            <Link href="/" className="text-white/30 hover:text-white transition-colors py-2 font-black text-xs tracking-widest uppercase">
                                 MENU PRINCIPAL
                             </Link>
                         </div>
@@ -148,24 +158,30 @@ export default function PlayPage() {
             )}
 
             {gameState === 'lost' && (
-                <div className="fixed inset-0 bg-red-950/90 backdrop-blur-md z-50 flex flex-col items-center justify-center p-8 text-center">
-                    <div className="w-24 h-24 bg-red-500 rounded-full flex items-center justify-center mb-6">
-                        <AlertTriangle size={48} className="text-white" />
-                    </div>
-                    <h2 className="text-4xl font-black mb-2 tracking-tight">TEMPO ESGOTADO!</h2>
-                    <p className="text-red-300 mb-8">Não desanime, a natureza tem seu tempo.</p>
+                <div className="fixed inset-0 bg-red-950/40 backdrop-blur-2xl z-50 flex flex-col items-center justify-center p-8 text-center animate-in fade-in duration-700">
+                    <motion.div
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="glass-card p-12 rounded-[3.5rem] w-full max-w-sm border-red-500/20 shadow-[0_32px_64px_-12px_rgba(220,38,38,0.3)]"
+                    >
+                        <div className="w-24 h-24 bg-red-500/20 rounded-full flex items-center justify-center mb-8 mx-auto border-2 border-red-500/30">
+                            <AlertTriangle size={48} className="text-red-500 animate-pulse" />
+                        </div>
+                        <h2 className="text-4xl font-black mb-2 tracking-tighter text-white uppercase">Tempo Esgotado</h2>
+                        <p className="text-red-300/60 mb-10 font-medium">A natureza tem seu próprio ritmo. Tente novamente!</p>
 
-                    <div className="flex flex-col gap-3 w-full max-w-xs">
-                        <button
-                            onClick={handleRetry}
-                            className="flex items-center justify-center gap-3 bg-white text-black py-4 rounded-2xl font-bold text-xl transition-all transform active:scale-95"
-                        >
-                            <RefreshCcw size={20} /> TENTAR NOVAMENTE
-                        </button>
-                        <Link href="/" className="text-white/40 hover:text-white transition-colors py-2 font-medium">
-                            MENU PRINCIPAL
-                        </Link>
-                    </div>
+                        <div className="flex flex-col gap-4 w-full">
+                            <button
+                                onClick={handleRetry}
+                                className="flex items-center justify-center gap-3 bg-white text-black py-5 rounded-[1.5rem] font-black text-xl transition-all transform active:scale-95 hover:bg-red-50 shadow-xl"
+                            >
+                                <RefreshCcw size={22} /> TENTAR NOVAMENTE
+                            </button>
+                            <Link href="/" className="text-white/30 hover:text-white transition-colors py-2 font-black text-xs tracking-widest uppercase">
+                                MENU PRINCIPAL
+                            </Link>
+                        </div>
+                    </motion.div>
                 </div>
             )}
         </main>

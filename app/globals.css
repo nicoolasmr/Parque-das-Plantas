@@ -3,23 +3,37 @@
 @tailwind utilities;
 
 :root {
-  --background: #fdf6e3;
-  --foreground: #2d3436;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #1a1a1a;
-    --foreground: #fdf6e3;
-  }
+  --background: #064e3b;
+  --foreground: #ecfdf5;
+  --primary: #10b981;
+  --secondary: #065f46;
+  --accent: #f59e0b;
+  --glass: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
 }
 
 body {
   color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background: radial-gradient(circle at top, #065f46, #064e3b);
+  font-family: 'Inter', sans-serif;
   touch-action: manipulation;
   overflow-x: hidden;
+  min-height: 100vh;
+}
+
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 canvas {
