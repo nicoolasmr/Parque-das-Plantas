@@ -17,19 +17,27 @@ MVP de um jogo puzzle hypercasual mobile-first construído com Next.js, TypeScri
 3. **Acesse no navegador:**
    Abra [http://localhost:3000](http://localhost:3000). Recomenda-se usar o modo de inspeção (F12) e alternar para a visualização mobile (Ctrl+Shift+M).
 
-## 🧠 Alinhamento com Skills (Expertise)
+## ✨ Experiência Premium (Phase 2)
 
-Este projeto foi construído seguindo rigorosamente os princípios de:
-- **Game Development**: Loop de 60fps com Delta Time, PWA (Progressive Web App) e Sistema de Partículas.
-- **Game Design**: Core Loop validado, Sistema de Loja (`/shop`) e progressão persistente.
-- **Game Art**: UI Premium, Micro-animações (Floating) e Assets Gerados por IA.
-- **Game Audio**: Audio Manager centralizado com suporte a categorias SFX/BGM.
+O **Parque das Plantas** evoluiu de um MVP para uma experiência de jogo completa:
+- **Visual Vibrante**: Sistema de partículas dinâmicas e animações secundárias (floating) para sementes.
+- **Economia de Jogo**: Loja funcional (`/shop`) com itens de suporte que utilizam o saldo de moedas do jogador.
+- **Som Imersivo**: Estrutura ready-to-go para BGM (Música de fundo) e SFX (Efeitos sonoros) via `AudioManager`.
+- **Evolução de Assets**: Substituição de formas básicas por sprites artísticos (Hand-painted style).
 
-## 🏪 Loja e Economia
-O jogo agora possui uma loja funcional onde você pode usar suas moedas para comprar itens que ajudam na gameplay.
+## 📱 PWA & Mobile First
 
-## 📱 PWA (App Mobile)
-O jogo pode ser instalado no seu celular! Basta acessar o link no Chrome e selecionar "Adicionar à tela de início".
+O jogo foi projetado para ser jogado prioritariamente em dispositivos móveis:
+1. **Instalável**: No Android/iOS, use a opção "Adicionar à tela de início" para ter o ícone no seu menu e rodar em tela cheia (Standalone).
+2. **Suporte a Vibração**: Feedback tátil ao cometer erros ou completar níveis.
+3. **Leve e Rápido**: Construído com Next.js para carregamento instantâneo.
+
+## 🧠 Alinhamento com Skills
+
+- **Game Development**: Loop de 60fps com Delta Time, PWA, Particle Systems.
+- **Game Design**: Core Loop de satisfação imediata, Curva de Dificuldade Balanceada, Meta-game (Loja).
+- **Game Art**: Estilo visual harmônico, feedbaks de impacto (Shake/Flash/Particles).
+- **Game Audio**: Mixagem modular e suporte a múltiplas categorias de som.
 
 ## 🌍 Como fazer Deploy no Vercel
 

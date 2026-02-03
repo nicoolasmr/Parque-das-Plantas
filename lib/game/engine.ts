@@ -119,32 +119,57 @@ export class GameEngine {
         });
     }
 
-    draw(ctx: CanvasRenderingContext2D, width: number, height: number) {
+    draw(ctx: CanvasRenderingContext2D, width: number, height: number, seedsSprite?: HTMLImageElement) {
         ctx.clearRect(0, 0, width, height);
 
         // Draw Beds
         this.beds.forEach(bed => {
+            ctx.fillStyle = bed.color;
+            ctx.globalAlpha = 0.2;
+            ctx.beginPath();
+            ctx.roundRect(bed.x - 40, bed.y - 40, 80, 80, 20);
+            ctx.fill();
             ctx.strokeStyle = bed.color;
-            ctx.lineWidth = 4;
-            ctx.strokeRect(bed.x, bed.y, bed.width, bed.height);
-
-            // Fill slightly
-            ctx.fillStyle = bed.color + '22';
-            ctx.fillRect(bed.x, bed.y, bed.width, bed.height);
+            ctx.lineWidth = 2;
+            ctx.globalAlpha = 0.5;
+            ctx.stroke();
+            ctx.globalAlpha = 1.0;
         });
 
         // Draw Seeds
         this.seeds.forEach(seed => {
             if (seed.isCorrected) return;
 
-            ctx.beginPath();
-            ctx.arc(seed.x, seed.y, seed.radius, 0, Math.PI * 2);
-            ctx.fillStyle = seed.color;
-            ctx.fill();
+            if (seedsSprite) {
+                // Determine sprite index based on color
+                // Sprite sheet has: Ruby (Red), Sapphire (Blue), Sunflower (Yellow), Forest (Green), Star (White)
+                let spriteIdx = 0;
+                if (seed.color === '#ef4444') spriteIdx = 0; // Red
+                else if (seed.color === '#3b82f6') spriteIdx = 1; // Blue
+                else if (seed.color === '#f59e0b') spriteIdx = 2; // Yellow
+                else if (seed.color === '#22c55e') spriteIdx = 3; // Green
+                if (seed.isWildcard) spriteIdx = 4; // Star
 
-            if (seed.isWildcard) {
-                ctx.strokeStyle = '#000';
-                ctx.lineWidth = 1;
+                // The generated sprite sheet has 5 items.
+                // We'll calculate source rectangle (assuming 512x512 grid or similar)
+                // For the specific generated sheet, it looks like a 2x3 grid or a row.
+                // Let's assume a simplified 1x5 row for now or centered crop.
+                const sSize = seedsSprite.width / 5;
+                ctx.drawImage(
+                    seedsSprite,
+                    spriteIdx * sSize, 0, sSize, seedsSprite.height,
+                    seed.x - 30, seed.y - 30, 60, 60
+                );
+            } else {
+                ctx.fillStyle = seed.color;
+                ctx.beginPath();
+                ctx.arc(seed.x, seed.y, this.draggedSeedId === seed.id ? 25 : 20, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            if (seed.isWildcard && !seedsSprite) {
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
                 ctx.stroke();
                 ctx.fillStyle = '#000';
                 ctx.font = '12px Arial';

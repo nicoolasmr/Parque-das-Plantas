@@ -52,9 +52,21 @@ export default function GameCanvas({ levelIndex, onWin, onLost }: GameCanvasProp
     const [status, setStatus] = useState<GameStatus>('idle');
     const [timeLeft, setTimeLeft] = useState(0);
     const [isShaking, setIsShaking] = useState(false);
-    const [showTutorial, setShowTutorial] = useState(levelIndex === 0);
+    const [showTutorial, setShowTutorial] = useState(false);
+    const [assetsLoaded, setAssetsLoaded] = useState(false);
+    const seedsSpriteRef = useRef<HTMLImageElement | null>(null);
 
     useEffect(() => {
+        const img = new Image();
+        img.src = '/seeds.png';
+        img.onload = () => {
+            seedsSpriteRef.current = img;
+            setAssetsLoaded(true);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!assetsLoaded) return;
         const canvas = canvasRef.current;
         if (!canvas) return;
 
@@ -115,7 +127,7 @@ export default function GameCanvas({ levelIndex, onWin, onLost }: GameCanvasProp
         let animationFrame: number;
         const render = (time: number) => {
             engine.update(time);
-            engine.draw(ctx, canvas.width, canvas.height);
+            engine.draw(ctx, canvas.width, canvas.height, seedsSpriteRef.current || undefined);
 
             // Render Particles
             particles = particles.filter(p => p.life > 0);
