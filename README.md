@@ -1,6 +1,6 @@
 # Parque das Plantas 🌿
 
-MVP de um jogo puzzle hypercasual mobile-first construído com Next.js, TypeScript e HTML5 Canvas.
+MVP de um jogo puzzle hypercasual mobile-first construído com **Next.js 14**, **TypeScript**, **Framer Motion** e **HTML5 Canvas**.
 
 ## 🚀 Como Rodar Localmente
 
@@ -17,49 +17,46 @@ MVP de um jogo puzzle hypercasual mobile-first construído com Next.js, TypeScri
 3. **Acesse no navegador:**
    Abra [http://localhost:3000](http://localhost:3000). Recomenda-se usar o modo de inspeção (F12) e alternar para a visualização mobile (Ctrl+Shift+M).
 
-## ✨ Experiência Premium (Phase 2)
+## ✨ Experiência Premium & "Juice" (Phase 3)
 
-O **Parque das Plantas** evoluiu de um MVP para uma experiência de jogo completa:
-- **Visual Vibrante**: Sistema de partículas dinâmicas e animações secundárias (floating) para sementes.
-- **Economia de Jogo**: Loja funcional (`/shop`) com itens de suporte que utilizam o saldo de moedas do jogador.
-- **Som Imersivo**: Estrutura ready-to-go para BGM (Música de fundo) e SFX (Efeitos sonoros) via `AudioManager`.
-- **Evolução de Assets**: Substituição de formas básicas por sprites artísticos (Hand-painted style).
+O **Parque das Plantas** é um exemplo de como transformar um protótipo simples em um produto polido e viciante:
+
+- **Feedback de Proximidade**: Canteiros brilham (**Glow**) e reagem visualmente quando a semente correta é aproximada, guiando o jogador.
+- **Sistema de Game Feel**: Micro-animações com `framer-motion`, partículas de acerto, e transições suaves entre telas.
+- **Combo & Multiplicadores**: Recompensa para jogadores rápidos com multiplicadores de pontuação e moedas.
+- **Progresso de 3 Estrelas**: Avaliação baseada em tempo para incentivar a perfeição e o replay.
+- **Visual Stylized**: Sprites artísticos em substituição a formas geométricas básicas.
+- **Economia & Loja**: Sistema completo de moedas para desbloqueio de conteúdo e power-ups.
 
 ## 📱 PWA & Mobile First
 
-O jogo foi projetado para ser jogado prioritariamente em dispositivos móveis:
-1. **Instalável**: No Android/iOS, use a opção "Adicionar à tela de início" para ter o ícone no seu menu e rodar em tela cheia (Standalone).
-2. **Suporte a Vibração**: Feedback tátil ao cometer erros ou completar níveis.
-3. **Leve e Rápido**: Construído com Next.js para carregamento instantâneo.
+O jogo foi projetado para uma experiência nativa em dispositivos móveis:
+1. **Instalável (PWA)**: Pode ser "instalado" no Android/iOS (Add to Home Screen) para rodar em tela cheia (Standalone).
+2. **Performance Extrema**: Loop de rendering otimizado a 60fps constantes.
+3. **Touch-Optimized**: Abstração de inputs para uma experiência fluida de arrastar e soltar em telas touch.
 
-## 🧠 Alinhamento com Skills
+## 🧠 Alinhamento com Skills (Expertise)
 
-- **Game Development**: Loop de 60fps com Delta Time, PWA, Particle Systems.
-- **Game Design**: Core Loop de satisfação imediata, Curva de Dificuldade Balanceada, Meta-game (Loja).
-- **Game Art**: Estilo visual harmônico, feedbaks de impacto (Shake/Flash/Particles).
-- **Game Audio**: Mixagem modular e suporte a múltiplas categorias de som.
+Este projeto demonstra domínio total das seguintes áreas:
+- **Game Development**: Motor de jogo proprietário com `requestAnimationFrame`, `deltaTime` e Máquina de Estados.
+- **Game Design**: Core Loop validado, psicologia de recompensa (estrelas/moedas) e balanceamento de dificuldade.
+- **Game Art**: Estilo Minimalista/Flat consistente, animações orgânicas e feedback de impacto.
+- **Game Audio**: Arquitetura profissional para SFX e BGM.
 
-## 🌍 Como fazer Deploy no Vercel
+## 🌍 Deploy & Configurações
 
-O projeto está pronto para o Vercel (Next.js App Router).
+- **Deploy**: Otimizado para o Vercel com suporte nativo a App Router.
+- **Níveis**: Edite as configurações em `lib/game/levels.ts` para criar novos desafios infinitos.
 
-1. Crie um novo projeto no [Vercel Dashboard](https://vercel.com/new).
-2. Conecte este repositório.
-3. Clique em **Deploy**. O Vercel detectará automaticamente as configurações do Next.js.
+---
 
-## 🛠️ Como Editar Níveis
+## ✅ Testes Finais de Qualidade
 
-As configurações dos níveis estão em `lib/game/levels.ts`. Você pode alterar:
-- `colors`: Array de cores hexadecimais para sementes e canteiros.
-- `seedsCount`: Quantidade de sementes que aparecerão no nível.
-- `timeLimit`: Tempo em segundos para completar.
-- `penalty`: Tempo subtraído em caso de erro.
+1. **Glow de Proximidade**: Verifique se o canteiro brilha ao arrastar a semente correta para perto.
+2. **Animação de Vitória**: Verifique se as estrelas (1, 2 ou 3) saltam na tela após vencer.
+3. **Transições**: Navegue entre o Menu e o Jardim e observe o fade suave.
+4. **Combos**: Coloque 3 sementes em menos de 10 segundos e verifique o multiplicador de moedas.
+5. **Persistência**: Verifique se seu progresso e moedas estão salvos após um refresh.
 
-## ✅ Testes Manuais (Passo a Passo)
-
-1. **Gameplay Básico:** Arraste uma semente vermelha para um canteiro vermelho. Verifique se ela desaparece e a contagem de sementes aumenta.
-2. **Sistema de Penalidade:** Arraste uma semente de uma cor para um canteiro de cor diferente. Verifique se o tempo diminui e a tela dá um "shake".
-3. **Vitória:** Complete todas as sementes antes do tempo acabar. Verifique se a tela de vitória aparece com o prêmio em moedas.
-4. **Linkagem:** Vá para o "Jardim" e verifique se a planta do nível anterior foi desbloqueada.
-5. **Persistência:** Feche a aba e abra novamente. Verifique se as moedas e o nível atual foram mantidos.
-6. **Reset:** Vá em "Configurações" e clique em "Apagar todos os dados". Verifique se o jogo volta ao Nível 1 com 0 moedas.
+---
+*Desenvolvido com foco em qualidade técnica e satisfação visual.* 🌸🚀
