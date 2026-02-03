@@ -17,6 +17,14 @@ MVP de um jogo puzzle hypercasual mobile-first construído com Next.js, TypeScri
 3. **Acesse no navegador:**
    Abra [http://localhost:3000](http://localhost:3000). Recomenda-se usar o modo de inspeção (F12) e alternar para a visualização mobile (Ctrl+Shift+M).
 
+## 🧠 Alinhamento com Skills (Expertise)
+
+Este projeto foi construído seguindo rigorosamente os princípios de:
+- **Game Development**: Loop de 60fps com Delta Time, Abstração de Input (PointerEvents) e Máquina de Estados.
+- **Game Design**: Core Loop validado, curva de dificuldade balanceada e sistema de progressão/recompensa.
+- **Game Art**: UI Minimalista, feedback visual (Shake/Interpolation) e paleta consistente.
+- **Game Audio**: Estrutura preparada para hierarquia de som e mixagem modular.
+
 ## 🌍 Como fazer Deploy no Vercel
 
 O projeto está pronto para o Vercel (Next.js App Router).
