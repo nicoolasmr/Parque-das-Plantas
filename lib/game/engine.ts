@@ -37,6 +37,13 @@ export class GameEngine {
     winCallback: () => void;
     lossCallback: () => void;
 
+    // Phase 3 additions
+    combo: number = 0;
+    maxCombo: number = 0;
+    lastMatchTime: number = 0;
+    totalTime: number = 0;
+    stars: number = 0;
+
     constructor(
         penaltyCallback: () => void,
         winCallback: () => void,
@@ -54,7 +61,10 @@ export class GameEngine {
         this.status = 'playing';
         this.score = 0;
         this.timeLeft = config.timeLimit;
+        this.totalTime = config.timeLimit;
         this.lastTime = performance.now();
+        this.combo = 0;
+        this.maxCombo = 0;
 
         // Init Beds
         const bedWidth = 80;
@@ -119,19 +129,30 @@ export class GameEngine {
         });
     }
 
-    draw(ctx: CanvasRenderingContext2D, width: number, height: number, seedsSprite?: HTMLImageElement) {
+    draw(ctx: CanvasRenderingContext2D, width: number, height: number, seedsSprite?: HTMLImageElement, highlightedBedId?: string) {
         ctx.clearRect(0, 0, width, height);
 
         // Draw Beds
         this.beds.forEach(bed => {
+            const isHighlighted = bed.id === highlightedBedId;
+
             ctx.fillStyle = bed.color;
-            ctx.globalAlpha = 0.2;
+            ctx.globalAlpha = isHighlighted ? 0.3 : 0.2;
+
+            if (isHighlighted) {
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = bed.color;
+            }
+
             ctx.beginPath();
             ctx.roundRect(bed.x - 40, bed.y - 40, 80, 80, 20);
             ctx.fill();
+
+            ctx.shadowBlur = 0; // Reset shadow
+
             ctx.strokeStyle = bed.color;
-            ctx.lineWidth = 2;
-            ctx.globalAlpha = 0.5;
+            ctx.lineWidth = isHighlighted ? 4 : 2;
+            ctx.globalAlpha = isHighlighted ? 0.8 : 0.5;
             ctx.stroke();
             ctx.globalAlpha = 1.0;
         });
@@ -217,11 +238,25 @@ export class GameEngine {
 
                         if (seed.color === bed.color || seed.isWildcard) {
                             seed.isCorrected = true;
-                            this.score += 10;
+
+                            // Combo Logic
+                            const now = performance.now();
+                            if (now - this.lastMatchTime < 3000) {
+                                this.combo++;
+                                if (this.combo > this.maxCombo) this.maxCombo = this.combo;
+                            } else {
+                                this.combo = 1;
+                            }
+                            this.lastMatchTime = now;
+
+                            const multiplier = Math.min(3, 1 + Math.floor(this.combo / 3) * 0.5);
+                            this.score += Math.round(10 * multiplier);
+
                             placed = true;
                             this.checkWin();
                         } else {
                             // Penalty
+                            this.combo = 0;
                             this.timeLeft -= levelPenalty;
                             this.penaltyCallback();
                             // Reset position
@@ -244,6 +279,13 @@ export class GameEngine {
     checkWin() {
         if (this.seeds.every(s => s.isCorrected)) {
             this.status = 'won';
+
+            // Calculate Stars (1-3)
+            const timeRatio = this.timeLeft / this.totalTime;
+            if (timeRatio > 0.6) this.stars = 3;
+            else if (timeRatio > 0.3) this.stars = 2;
+            else this.stars = 1;
+
             this.winCallback();
         }
     }

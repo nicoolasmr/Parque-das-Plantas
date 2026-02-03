@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 interface GameCanvasProps {
     levelIndex: number;
-    onWin: (coins: number) => void;
+    onWin: (coins: number, stars: number) => void;
     onLost: () => void;
 }
 
@@ -85,8 +85,9 @@ export default function GameCanvas({ levelIndex, onWin, onLost }: GameCanvasProp
         const win = () => {
             audioManager.playSound('victory');
             setStatus('won');
+            const finalStars = engineRef.current?.stars || 1;
             const coins = (levelIndex + 1) * 20 + Math.floor(engineRef.current?.timeLeft || 0);
-            onWin(coins);
+            onWin(coins, finalStars);
         };
 
         const loss = () => {
@@ -102,6 +103,7 @@ export default function GameCanvas({ levelIndex, onWin, onLost }: GameCanvasProp
         const originalHandlePointerUp = engine.handlePointerUp.bind(engine);
         engine.handlePointerUp = (penaltyVal: number) => {
             const beforeScore = engine.score;
+            const beforeCombo = engine.combo;
             originalHandlePointerUp(penaltyVal);
             if (engine.score > beforeScore) {
                 audioManager.playSound('success');
@@ -111,6 +113,11 @@ export default function GameCanvas({ levelIndex, onWin, onLost }: GameCanvasProp
                     for (let i = 0; i < 20; i++) {
                         particles.push(new Particle(seed.x, seed.y, seed.color));
                     }
+                }
+
+                if (engine.combo > 1) {
+                    // Spawn combo particles or text (simplified for now)
+                    console.log(`Combo! x${engine.combo}`);
                 }
             }
         };

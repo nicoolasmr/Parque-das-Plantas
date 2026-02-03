@@ -19,9 +19,10 @@ export default function PlayPage() {
         setCurrentLevelIndex(Math.min(data.highestLevel - 1, LEVELS.length - 1));
     }, []);
 
-    const handleWin = (coins: number) => {
-        setEarnedCoins(coins);
+    const handleWin = (coins: number, earnedStars: number) => {
+        setStars(earnedStars);
         setGameState('won');
+        setCurrentCoins(coins);
 
         const nextLevel = Math.min(currentLevelIndex + 2, LEVELS.length);
         const unlockedPlant = PLANTS_DATA[currentLevelIndex + 1]?.id;
@@ -77,20 +78,42 @@ export default function PlayPage() {
             {/* Overlays */}
             {gameState === 'won' && (
                 <div className="fixed inset-0 bg-green-950/90 backdrop-blur-md z-50 flex flex-col items-center justify-center p-8 text-center animate-in fade-in duration-500">
-                    <div className="w-24 h-24 bg-yellow-400 rounded-full flex items-center justify-center mb-6 shadow-[0_0_50px_rgba(250,204,21,0.5)]">
-                        <Trophy size={48} className="text-green-900" />
-                    </div>
+                    <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="bg-[#22c55e] p-8 rounded-[3rem] w-full max-w-sm text-center shadow-2xl border-4 border-green-400"
+                >
+                    <Trophy className="mx-auto mb-4 text-yellow-300 drop-shadow-lg" size={80} />
                     <h2 className="text-4xl font-black mb-2 tracking-tight">VITÓRIA!</h2>
-                    <p className="text-green-300 mb-8 font-medium">Você cultivou as sementes com perfeição.</p>
 
-                    <div className="bg-white/10 p-6 rounded-3xl border border-white/10 mb-8 w-full max-w-xs">
-                        <div className="flex justify-between items-center mb-4">
-                            <span className="opacity-60">Recompensa</span>
-                            <div className="flex items-center gap-2 font-bold text-xl">
-                                <Coins size={20} className="text-yellow-400" />
-                                {earnedCoins}
-                            </div>
+                    <div className="flex justify-center gap-2 mb-6">
+                        {[1, 2, 3].map((s) => (
+                            <motion.div
+                                key={s}
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                transition={{ delay: 0.2 + s * 0.1, type: "spring" }}
+                            >
+                                <Star
+                                    size={32}
+                                    className={s <= stars ? "text-yellow-400 fill-yellow-400" : "text-white/20"}
+                                />
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    <div className="bg-green-600/50 p-6 rounded-3xl mb-8 flex flex-col items-center gap-2">
+                        <span className="text-xs font-bold opacity-60 uppercase tracking-widest">Recompensa</span>
+                        <div className="flex items-center gap-3">
+                            <motion.div
+                                animate={{ y: [0, -10, 0] }}
+                                transition={{ repeat: Infinity, duration: 2 }}
+                            >
+                                <Coins className="text-yellow-400" size={32} />
+                            </motion.div>
+                            <span className="text-4xl font-black text-white">{currentCoins}</span>
                         </div>
+                    </div>
                         {PLANTS_DATA[currentLevelIndex + 1] && (
                             <div className="flex justify-between items-center p-3 bg-green-500/20 rounded-2xl border border-green-500/20">
                                 <span className="text-sm">Nova Planta:</span>
@@ -119,29 +142,32 @@ export default function PlayPage() {
                         </Link>
                     </div>
                 </div>
-            )}
+    )
+}
 
-            {gameState === 'lost' && (
-                <div className="fixed inset-0 bg-red-950/90 backdrop-blur-md z-50 flex flex-col items-center justify-center p-8 text-center">
-                    <div className="w-24 h-24 bg-red-500 rounded-full flex items-center justify-center mb-6">
-                        <AlertTriangle size={48} className="text-white" />
-                    </div>
-                    <h2 className="text-4xl font-black mb-2 tracking-tight">TEMPO ESGOTADO!</h2>
-                    <p className="text-red-300 mb-8">Não desanime, a natureza tem seu tempo.</p>
+{
+    gameState === 'lost' && (
+        <div className="fixed inset-0 bg-red-950/90 backdrop-blur-md z-50 flex flex-col items-center justify-center p-8 text-center">
+            <div className="w-24 h-24 bg-red-500 rounded-full flex items-center justify-center mb-6">
+                <AlertTriangle size={48} className="text-white" />
+            </div>
+            <h2 className="text-4xl font-black mb-2 tracking-tight">TEMPO ESGOTADO!</h2>
+            <p className="text-red-300 mb-8">Não desanime, a natureza tem seu tempo.</p>
 
-                    <div className="flex flex-col gap-3 w-full max-w-xs">
-                        <button
-                            onClick={handleRetry}
-                            className="flex items-center justify-center gap-3 bg-white text-black py-4 rounded-2xl font-bold text-xl transition-all transform active:scale-95"
-                        >
-                            <RefreshCcw size={20} /> TENTAR NOVAMENTE
-                        </button>
-                        <Link href="/" className="text-white/40 hover:text-white transition-colors py-2 font-medium">
-                            MENU PRINCIPAL
-                        </Link>
-                    </div>
-                </div>
-            )}
-        </main>
+            <div className="flex flex-col gap-3 w-full max-w-xs">
+                <button
+                    onClick={handleRetry}
+                    className="flex items-center justify-center gap-3 bg-white text-black py-4 rounded-2xl font-bold text-xl transition-all transform active:scale-95"
+                >
+                    <RefreshCcw size={20} /> TENTAR NOVAMENTE
+                </button>
+                <Link href="/" className="text-white/40 hover:text-white transition-colors py-2 font-medium">
+                    MENU PRINCIPAL
+                </Link>
+            </div>
+        </div>
+    )
+}
+        </main >
     );
 }
