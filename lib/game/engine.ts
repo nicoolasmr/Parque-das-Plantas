@@ -144,9 +144,14 @@ export class GameEngine {
                 ctx.shadowColor = bed.color;
             }
 
-            ctx.beginPath();
-            ctx.roundRect(bed.x - 40, bed.y - 40, 80, 80, 20);
-            ctx.fill();
+            if (ctx.roundRect) {
+                ctx.beginPath();
+                ctx.roundRect(bed.x - 40, bed.y - 40, 80, 80, 20);
+                ctx.fill();
+            } else {
+                // Fallback for browsers that don't support roundRect
+                ctx.fillRect(bed.x - 40, bed.y - 40, 80, 80);
+            }
 
             ctx.shadowBlur = 0; // Reset shadow
 
@@ -165,10 +170,12 @@ export class GameEngine {
                 // Determine sprite index based on color
                 // Sprite sheet has: Ruby (Red), Sapphire (Blue), Sunflower (Yellow), Forest (Green), Star (White)
                 let spriteIdx = 0;
-                if (seed.color === '#ef4444') spriteIdx = 0; // Red
-                else if (seed.color === '#3b82f6') spriteIdx = 1; // Blue
-                else if (seed.color === '#f59e0b') spriteIdx = 2; // Yellow
-                else if (seed.color === '#22c55e') spriteIdx = 3; // Green
+                // Normalize colors to lowercase for comparison
+                const c = seed.color.toLowerCase();
+                if (c === '#ff5e5e') spriteIdx = 0; // Red
+                else if (c === '#5e7dff') spriteIdx = 1; // Blue
+                else if (c === '#fff35e') spriteIdx = 2; // Yellow
+                else if (c === '#5eff7d') spriteIdx = 3; // Green
                 if (seed.isWildcard) spriteIdx = 4; // Star
 
                 // The generated sprite sheet has 5 items.

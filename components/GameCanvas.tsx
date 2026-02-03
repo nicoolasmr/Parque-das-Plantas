@@ -63,6 +63,10 @@ export default function GameCanvas({ levelIndex, onWin, onLost }: GameCanvasProp
             seedsSpriteRef.current = img;
             setAssetsLoaded(true);
         };
+        img.onerror = () => {
+            console.error('Failed to load seeds.png, falling back to primitive shapes');
+            setAssetsLoaded(true); // Still set to true to unblock the engine
+        };
     }, []);
 
     useEffect(() => {
