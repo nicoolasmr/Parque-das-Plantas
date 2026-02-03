@@ -15,6 +15,7 @@ export interface Seed extends Point {
     originalY: number;
     isCorrected: boolean;
     isWildcard?: boolean;
+    particlesSpawned?: boolean;
 }
 
 export interface Bed extends Point {
@@ -107,11 +108,13 @@ export class GameEngine {
             this.lossCallback();
         }
 
-        // Simple interpolation for dragging
-        this.seeds.forEach(seed => {
+        // Simple interpolation for dragging and floating animation
+        this.seeds.forEach((seed, i) => {
             if (this.draggedSeedId !== seed.id && !seed.isCorrected) {
+                // Floating effect
+                const floatOffset = Math.sin(currentTime / 500 + i) * 5;
                 seed.x += (seed.targetX - seed.x) * 0.2;
-                seed.y += (seed.targetY - seed.y) * 0.2;
+                seed.y += (seed.targetY + floatOffset - seed.y) * 0.2;
             }
         });
     }

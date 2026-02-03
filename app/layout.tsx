@@ -14,6 +14,10 @@ export default function RootLayout({
 }) {
     return (
         <html lang="pt-BR">
+            <head>
+                <link rel="manifest" href="/manifest.json" />
+                <meta name="theme-color" content="#22c55e" />
+            </head>
             <body>{children}</body>
         </html>
     )

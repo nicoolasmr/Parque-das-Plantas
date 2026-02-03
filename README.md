@@ -20,10 +20,16 @@ MVP de um jogo puzzle hypercasual mobile-first construído com Next.js, TypeScri
 ## 🧠 Alinhamento com Skills (Expertise)
 
 Este projeto foi construído seguindo rigorosamente os princípios de:
-- **Game Development**: Loop de 60fps com Delta Time, Abstração de Input (PointerEvents) e Máquina de Estados.
-- **Game Design**: Core Loop validado, curva de dificuldade balanceada e sistema de progressão/recompensa.
-- **Game Art**: UI Minimalista, feedback visual (Shake/Interpolation) e paleta consistente.
-- **Game Audio**: Estrutura preparada para hierarquia de som e mixagem modular.
+- **Game Development**: Loop de 60fps com Delta Time, PWA (Progressive Web App) e Sistema de Partículas.
+- **Game Design**: Core Loop validado, Sistema de Loja (`/shop`) e progressão persistente.
+- **Game Art**: UI Premium, Micro-animações (Floating) e Assets Gerados por IA.
+- **Game Audio**: Audio Manager centralizado com suporte a categorias SFX/BGM.
+
+## 🏪 Loja e Economia
+O jogo agora possui uma loja funcional onde você pode usar suas moedas para comprar itens que ajudam na gameplay.
+
+## 📱 PWA (App Mobile)
+O jogo pode ser instalado no seu celular! Basta acessar o link no Chrome e selecionar "Adicionar à tela de início".
 
 ## 🌍 Como fazer Deploy no Vercel
 

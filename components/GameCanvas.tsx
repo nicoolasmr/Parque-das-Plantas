@@ -3,13 +3,47 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { GameEngine, GameStatus } from '@/lib/game/engine';
 import { LEVELS, LevelConfig } from '@/lib/game/levels';
-import { Save, RefreshCcw, Home, Play, ChevronRight, Flower2 } from 'lucide-react';
+import { audioManager } from '@/lib/game/audioManager';
+import { Save, RefreshCcw, Home, Play, ChevronRight, Flower2, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
 interface GameCanvasProps {
     levelIndex: number;
     onWin: (coins: number) => void;
     onLost: () => void;
+}
+
+class Particle {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    life: number;
+    color: string;
+
+    constructor(x: number, y: number, color: string) {
+        this.x = x;
+        this.y = y;
+        this.vx = (Math.random() - 0.5) * 10;
+        this.vy = (Math.random() - 0.5) * 10;
+        this.life = 1.0;
+        this.color = color;
+    }
+
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.life -= 0.02;
+    }
+
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.globalAlpha = this.life;
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+    }
 }
 
 export default function GameCanvas({ levelIndex, onWin, onLost }: GameCanvasProps) {
@@ -27,25 +61,47 @@ export default function GameCanvas({ levelIndex, onWin, onLost }: GameCanvasProp
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
+        let particles: Particle[] = [];
+
         const penalty = () => {
             setIsShaking(true);
+            audioManager.playSound('error');
             setTimeout(() => setIsShaking(false), 300);
             if (navigator.vibrate) navigator.vibrate(50);
         };
 
         const win = () => {
+            audioManager.playSound('victory');
             setStatus('won');
             const coins = (levelIndex + 1) * 20 + Math.floor(engineRef.current?.timeLeft || 0);
             onWin(coins);
         };
 
         const loss = () => {
+            audioManager.playSound('lost');
             setStatus('lost');
             onLost();
         };
 
         const engine = new GameEngine(penalty, win, loss);
         engineRef.current = engine;
+
+        // Hook into engine to spawn particles on correct placement
+        const originalHandlePointerUp = engine.handlePointerUp.bind(engine);
+        engine.handlePointerUp = (penaltyVal: number) => {
+            const beforeScore = engine.score;
+            originalHandlePointerUp(penaltyVal);
+            if (engine.score > beforeScore) {
+                audioManager.playSound('success');
+                const seed = engine.seeds.find(s => s.isCorrected && !s.particlesSpawned);
+                if (seed) {
+                    (seed as any).particlesSpawned = true;
+                    for (let i = 0; i < 20; i++) {
+                        particles.push(new Particle(seed.x, seed.y, seed.color));
+                    }
+                }
+            }
+        };
 
         const resize = () => {
             canvas.width = Math.min(window.innerWidth, 600);
@@ -60,6 +116,14 @@ export default function GameCanvas({ levelIndex, onWin, onLost }: GameCanvasProp
         const render = (time: number) => {
             engine.update(time);
             engine.draw(ctx, canvas.width, canvas.height);
+
+            // Render Particles
+            particles = particles.filter(p => p.life > 0);
+            particles.forEach(p => {
+                p.update();
+                p.draw(ctx);
+            });
+
             setTimeLeft(Math.max(0, Math.ceil(engine.timeLeft)));
             setStatus(engine.status);
             animationFrame = requestAnimationFrame(render);

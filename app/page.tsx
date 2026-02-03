@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Flower, Play, BookOpen, Settings as SettingsIcon } from 'lucide-react'
+import { Flower, Play, BookOpen, Settings as SettingsIcon, ShoppingBag } from 'lucide-react'
 
 export default function Home() {
     return (
@@ -23,6 +23,12 @@ export default function Home() {
                 <Link href="/garden">
                     <button className="flex items-center justify-center gap-3 w-full bg-white/10 hover:bg-white/20 py-4 rounded-2xl font-bold text-lg backdrop-blur-sm transition-all border border-white/10 transform active:scale-95">
                         <BookOpen size={20} /> MEU JARDIM
+                    </button>
+                </Link>
+
+                <Link href="/shop">
+                    <button className="flex items-center justify-center gap-3 w-full bg-white/10 hover:bg-white/20 py-4 rounded-2xl font-bold text-lg backdrop-blur-sm transition-all border border-white/10 transform active:scale-95">
+                        <ShoppingBag size={20} /> LOJA
                     </button>
                 </Link>
 
